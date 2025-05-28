@@ -8,6 +8,7 @@ from copy import deepcopy
 from itertools import repeat
 from tqdm import tqdm
 from einops import rearrange
+from pathlib import Path
 import wandb
 import time
 from torchvision import transforms
@@ -29,6 +30,9 @@ e = IPython.embed
 
 wandb.login(key='62c48335e0b39b20cfd41fd66ab3b05dbc625469')
 
+root_dir = Path(__file__).resolve().parent.parent
+
+
 def get_auto_index(dataset_dir):
     max_idx = 1000
     for i in range(max_idx+1):
@@ -40,10 +44,10 @@ def main(args):
     set_seed(1)
     # command line parameters
     is_eval = args['eval']
-    ckpt_dir = args['ckpt_dir']
     policy_class = args['policy_class']
     onscreen_render = args['onscreen_render']
     task_name = args['task_name']
+    ckpt_dir = os.path.join(root_dir, args['ckpt_dir'], task_name)
     batch_size_train = args['batch_size']
     batch_size_val = args['batch_size']
     num_steps = args['num_steps']
@@ -70,7 +74,7 @@ def main(args):
     name_filter = task_config.get('name_filter', lambda n: True)
 
     # fixed parameters
-    state_dim = 14
+    state_dim = 50
     lr_backbone = 1e-5
     backbone = 'resnet18'
     if policy_class == 'ACT':
@@ -91,7 +95,7 @@ def main(args):
                          'vq': args['use_vq'],
                          'vq_class': args['vq_class'],
                          'vq_dim': args['vq_dim'],
-                         'action_dim': 16,
+                         'action_dim': 52,
                          'no_encoder': args['no_encoder'],
                          }
     elif policy_class == 'Diffusion':
@@ -595,8 +599,8 @@ def train_bc(train_dataloader, val_dataloader, config):
             ckpt_name = f'policy_step_{step}_seed_{seed}.ckpt'
             ckpt_path = os.path.join(ckpt_dir, ckpt_name)
             torch.save(policy.serialize(), ckpt_path)
-            success, _ = eval_bc(config, ckpt_name, save_episode=True, num_rollouts=10)
-            wandb.log({'success': success}, step=step)
+            # success, _ = eval_bc(config, ckpt_name, save_episode=True, num_rollouts=10)
+            # wandb.log({'success': success}, step=step)
 
         # training
         policy.train()

@@ -2,8 +2,15 @@ import pathlib
 import os
 
 ### Task parameters
-DATA_DIR = '/home/tw/Project/ff/etri_robotics/act-plus-plus/dataset'
+DATA_DIR = '/home/tw/Project/ff/etri_robotics/dataset'
 SIM_TASK_CONFIGS = {
+    'sim_task1':{
+        'dataset_dir': DATA_DIR + '/task1',
+        'num_episodes': 50,
+        'episode_len': 300,
+        'camera_names': ['head_camera_rgb']
+    },
+
     'sim_transfer_cube_scripted':{
         'dataset_dir': DATA_DIR + '/sim_transfer_cube_scripted',
         'num_episodes': 50,
