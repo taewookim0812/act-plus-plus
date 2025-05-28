@@ -62,6 +62,15 @@ SIM_TASK_CONFIGS = {
 
 }
 
+REAL_TASK_CONFIGS = {
+    'real_task1':{
+        'dataset_dir': DATA_DIR + '/task1',
+        'num_episodes': 50,
+        'episode_len': 300,
+        'camera_names': ['head_camera_rgb']
+    }
+}
+
 ### Simulation envs fixed constants
 DT = 0.02
 FPS = 50
